@@ -5,9 +5,9 @@ module ScapoLite
     class Tile
       @[Anyolite::ExcludeInstanceMethod("colorize")]
       struct Type
-        property color_code : Int32 = COLOR_CODE_BLACK
+        property color_code : Int32
 
-        def initialize(@color_code : Int32)
+        def initialize(@color_code : Int32 = ScapoLite::COLOR_CODE_BLACK)
         end
       end
 

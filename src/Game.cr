@@ -2,17 +2,94 @@ module ScapoLite
   @[Anyolite::ExcludeInstanceMethod("colorize")]
   class Game
     property field : Field
-    
+    property hamster : Entity
+
+    @[Anyolite::ExcludeInstanceMethod("colorize")]
+    enum Direction
+      UP
+      DOWN
+      LEFT
+      RIGHT
+    end
+
     def initialize
       @field = Field.new
+      @hamster = Entity.new(entity_type: Entity::TYPE_HAMSTER)
+      @hamster_x = 10
+      @hamster_y = 10
+
+      @field.add_entity(@hamster, x: @hamster_x, y: @hamster_y)
     end
 
     def update
       @field.update
+
+      key = read_keypress
+
+      case key
+        when :q then exit
+        when :ctrl_c then exit
+        when :escape then exit
+        when :up then try_to_move_hamster(Direction::UP)
+        when :down then try_to_move_hamster(Direction::DOWN)
+        when :left then try_to_move_hamster(Direction::LEFT)
+        when :right then try_to_move_hamster(Direction::RIGHT)
+      end
+    end
+
+    def try_to_move_hamster(direction : Direction)
+      case direction
+        when Direction::UP then target = {@hamster_x, @hamster_y - 1}
+        when Direction::DOWN then target = {@hamster_x, @hamster_y + 1}
+        when Direction::LEFT then target = {@hamster_x - 1, @hamster_y}
+        when Direction::RIGHT then target = {@hamster_x + 1, @hamster_y}
+        else raise "Invalid direction argument: #{direction}"
+      end
+
+      if @field.in_bounds?(x: target[0], y: target[1])
+        entity_ahead = @field.get_entity(x: target[0], y: target[1])
+
+        unless entity_ahead && entity_ahead.entity_type.solid
+          @field.move_entity(from_x: @hamster_x, from_y: @hamster_y, to_x: target[0], to_y: target[1])
+          @hamster_x = target[0]
+          @hamster_y = target[1]
+        end
+      else
+        nil
+      end
     end
 
     def draw
       @field.draw
+    end
+
+    # Stolen from the 2048.cr sample for Crystal
+    def read_keypress
+      STDIN.raw do |io|
+        buffer = Bytes.new(3)
+        bytes_read = io.read(buffer)
+        return :unknown if bytes_read == 0
+        input = String.new(buffer[0, bytes_read])
+
+        case input
+        when "\e[A", "w"
+          :up
+        when "\e[B", "s"
+          :down
+        when "\e[C", "d"
+          :right
+        when "\e[D", "a"
+          :left
+        when "\e"
+          :escape
+        when "\u{3}"
+          :ctrl_c
+        when "q", "Q"
+          :q
+        else
+          :unknown
+        end
+      end
     end
   end
 end
