@@ -4,6 +4,8 @@
 
 ScapoLite is a demo game, which is designed to show the capabilities of Anyolite.
 
+Link to Anyolite: https://github.com/Anyolite/Anyolite.
+
 ## Information
 
 In this game, you play a gem-loving hamster named Jacinth.
