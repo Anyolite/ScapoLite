@@ -1,0 +1,15 @@
+name: ScapoLite
+version: 0.0.1
+
+authors:
+  - Hadeweka
+
+dependencies:
+  anyolite:
+    github: Anyolite/anyolite
+    branch: master
+    version: 0.12.0
+
+license: MIT
+
+crystal: '>= 0.34.0'
