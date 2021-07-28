@@ -4,16 +4,22 @@ module ScapoLite
     @tiles = [] of Array(Tile)
     @entities = [] of Array(Entity?)
 
-    WIDTH = 21
-    HEIGHT = 21
+    property width : Int32
+    property height : Int32
 
-    def initialize
-      0.upto(HEIGHT - 1) do |y|
+    def initialize(@width : Int32, @height : Int32)
+    end
+    
+    def fill_with_objects
+      0.upto(@height - 1) do |y|
         @tiles.push([] of Tile)
         @entities.push([] of Entity?)
-        0.upto(WIDTH - 1) do |x|
-          @tiles[y].push(Tile.new(tile_type: Tile::TYPE_DIRT))
-          if rand < 0.1
+        0.upto(@width - 1) do |x|
+          new_tile_type = (rand < 0.5 ? Tile::TYPE_DIRT : Tile::TYPE_GRASS)
+
+          @tiles[y].push(Tile.new(tile_type: new_tile_type))
+
+          if rand < 0.5 && new_tile_type == Tile::TYPE_GRASS
             @entities[y].push(Entity.new(entity_type: Entity::TYPE_TREE))
           else
             @entities[y].push(nil)
@@ -26,8 +32,10 @@ module ScapoLite
     end
 
     def in_bounds?(x : Int32, y : Int32)
-      (0 .. WIDTH - 1).includes?(x) && (0 .. HEIGHT - 1).includes?(y)
+      (0 .. @width - 1).includes?(x) && (0 .. @height - 1).includes?(y)
     end
+
+    # TODO: Check for bounds in these functions
 
     def get_tile(x : Int32, y : Int32)
       @tiles[y][x]
@@ -53,9 +61,9 @@ module ScapoLite
     end
 
     def draw
-      clear_screen
-      0.upto(HEIGHT - 1) do |y|
-        0.upto(WIDTH - 1) do |x|
+      soft_clear_screen
+      0.upto(@height - 1) do |y|
+        0.upto(@width - 1) do |x|
           entity = get_entity(x: x, y: y)
 
           bg_color = COLOR_CODES[get_tile(x: x, y: y).tile_type.color_code]
@@ -70,8 +78,14 @@ module ScapoLite
       end
     end
 
-    def clear_screen
+    # Clears everything
+    def hard_clear_screen
       print "\e[2J\e[1;1H"
+    end
+
+    # Overwrites old screen
+    def soft_clear_screen
+      print "\e[1;1H"
     end
   end
 end

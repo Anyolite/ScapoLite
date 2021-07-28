@@ -12,11 +12,22 @@ module ScapoLite
       RIGHT
     end
 
-    def initialize
-      @field = Field.new
+    def initialize(field_width : Int32 = 20, field_height : Int32 = 20)
+      @field = Field.new(width: field_width, height: field_height)
       @hamster = Entity.new(entity_type: Entity::TYPE_HAMSTER)
       @hamster_x = 10
       @hamster_y = 10
+      @hamster_active = false
+    end
+
+    def add_hamster(x : Int32, y : Int32)
+      @hamster_x = x
+      @hamster_y = y
+      @hamster_active = true
+
+      if !@field.in_bounds?(x, y)
+        raise "Invalid hamster coords: #{x} #{y}"
+      end
 
       @field.add_entity(@hamster, x: @hamster_x, y: @hamster_y)
     end
@@ -38,6 +49,8 @@ module ScapoLite
     end
 
     def try_to_move_hamster(direction : Direction)
+      return if !@hamster_active
+
       case direction
         when Direction::UP then target = {@hamster_x, @hamster_y - 1}
         when Direction::DOWN then target = {@hamster_x, @hamster_y + 1}
