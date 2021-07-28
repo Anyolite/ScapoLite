@@ -1,5 +1,11 @@
 require "anyolite"
+require "colorize"
+
+require "./src/Field.cr"
+require "./src/Game.cr"
+require "./src/Utility.cr"
 
 Anyolite::RbInterpreter.create do |rb|
-  rb.load_script_from_file("scripts/game.rb")
+  Anyolite.wrap(rb, ScapoLite)
+  rb.load_script_from_file("scripts/test.rb")
 end
