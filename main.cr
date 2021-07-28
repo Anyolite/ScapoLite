@@ -1,6 +1,8 @@
 require "anyolite"
 require "colorize"
 
+require "./src/Tile.cr"
+require "./src/Entity.cr"
 require "./src/Field.cr"
 require "./src/Game.cr"
 require "./src/Utility.cr"
