@@ -3,6 +3,7 @@ module ScapoLite
   class Game
     property field : Field
     property hamster : Entity
+    property score : Int32 = 0
 
     @[Anyolite::ExcludeInstanceMethod("colorize")]
     enum Direction
@@ -51,6 +52,10 @@ module ScapoLite
     def try_to_move_hamster(direction : Direction)
       return if !@hamster_active
 
+      hamster_entity = @field.get_entity(x: @hamster_x, y: @hamster_y)
+
+      return if !hamster_entity
+
       case direction
         when Direction::UP then target = {@hamster_x, @hamster_y - 1}
         when Direction::DOWN then target = {@hamster_x, @hamster_y + 1}
@@ -63,6 +68,7 @@ module ScapoLite
         entity_ahead = @field.get_entity(x: target[0], y: target[1])
 
         unless entity_ahead && entity_ahead.entity_type.solid
+          entity_ahead.contact_with_hamster(hamster_entity) if entity_ahead
           @field.move_entity(from_x: @hamster_x, from_y: @hamster_y, to_x: target[0], to_y: target[1])
           @hamster_x = target[0]
           @hamster_y = target[1]

@@ -17,6 +17,27 @@ module ScapoLite
 
     property entity_type : Type
 
+    @on_contact : Anyolite::RbRef? = nil
+
+    # This demonstrates one of the most powerful features of Anyolite:
+    # The ability to store Ruby closures in a simple variable.
+    # The Anyolite::StoreBlockArg annotation stores the block argument internally,
+    # which then can be recalled using Anyolite.obtain_given_rb_block.
+    @[Anyolite::StoreBlockArg]
+    @[Anyolite::ReturnNil]
+    def on_contact
+      @on_contact = Anyolite.obtain_given_rb_block
+    end
+
+    # One restriction is what block arguments are given.
+    # Here, the hamster and the entity are the most useful ones.
+    # Other content is still possible due to the closure nature of the blocks passed.
+    def contact_with_hamster(hamster : Entity)
+      if @on_contact
+        Anyolite.call_rb_block(@on_contact, [hamster, self])
+      end
+    end
+
     def initialize(@entity_type : Type)
     end
   end

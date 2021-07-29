@@ -17,6 +17,10 @@ while true
     ry = rand(game.field.height)
 
     entity = ScapoLite::Entity.new(entity_type: ScapoLite::Entity::TYPE_GEM)
+    entity.on_contact do |hamster, entity|
+      game.score += 1
+      puts "> Score: #{game.score}"
+    end
     game.field.add_entity(entity: entity, x: rx, y: ry) unless game.field.get_entity(x: rx, y: ry)
   end
 end
