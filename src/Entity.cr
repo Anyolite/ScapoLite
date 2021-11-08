@@ -1,7 +1,5 @@
 module ScapoLite
-  @[Anyolite::ExcludeInstanceMethod("colorize")]
   class Entity
-    @[Anyolite::ExcludeInstanceMethod("colorize")]
     struct Type
       property color_code : Int32
       property str : String

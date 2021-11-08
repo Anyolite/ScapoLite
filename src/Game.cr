@@ -1,11 +1,9 @@
 module ScapoLite
-  @[Anyolite::ExcludeInstanceMethod("colorize")]
   class Game
     property field : Field
     property hamster : Entity
     property score : Int32 = 0
 
-    @[Anyolite::ExcludeInstanceMethod("colorize")]
     enum Direction
       UP
       DOWN

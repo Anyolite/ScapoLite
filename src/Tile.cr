@@ -1,9 +1,7 @@
 module ScapoLite
   class Field
     @[Anyolite::ExcludeConstant("COLOR_CODES")]
-    @[Anyolite::ExcludeInstanceMethod("colorize")]
     class Tile
-      @[Anyolite::ExcludeInstanceMethod("colorize")]
       struct Type
         property color_code : Int32
 

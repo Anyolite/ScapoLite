@@ -1,5 +1,4 @@
 module ScapoLite
-  @[Anyolite::ExcludeInstanceMethod("colorize")]
   class Field
     @tiles = [] of Array(Tile)
     @entities = [] of Array(Entity?)
