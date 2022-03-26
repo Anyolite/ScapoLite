@@ -7,8 +7,8 @@ authors:
 dependencies:
   anyolite:
     github: Anyolite/anyolite
-    branch: master
-    version: 0.15.0
+    branch: main
+    version: 0.17.0
 
 license: MIT
 
